@@ -9,11 +9,17 @@ const app = new Elysia()
     "/",
 
     () => {
+      if (process.env.NODE_ENV === "production") {
+        return {
+          status: "ok",
+          message: "Welcome to the API",
+          cron: "active"
+        }}else{
       return {
 
         authDocs: "For auth docs visit /api/auth/reference",
         docs: "For api docs visit /openapi"
-      }
+      }}
     },
   )
   .use(betterAuth)
