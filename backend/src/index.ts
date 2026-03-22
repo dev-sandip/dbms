@@ -4,7 +4,7 @@ import betterAuth from "./macros/auth.macro";
 import {  openapi } from '@elysiajs/openapi';
 import { category } from "./routes/category";
 import { article } from "./routes/article";
-export default new Elysia()
+const app = new Elysia()
   .get(
     "/",
 
@@ -27,5 +27,5 @@ export default new Elysia()
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization']
     })
-  )
+  ).listen(process.env.PORT ?? 3000) 
  
