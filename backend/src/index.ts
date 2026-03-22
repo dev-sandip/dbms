@@ -4,7 +4,7 @@ import betterAuth from "./macros/auth.macro";
 import {  openapi } from '@elysiajs/openapi';
 import { category } from "./routes/category";
 import { article } from "./routes/article";
-const app = new Elysia()
+export default new Elysia()
   .get(
     "/",
 
@@ -29,4 +29,3 @@ const app = new Elysia()
     })
   )
  
-export default app;
