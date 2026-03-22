@@ -56,8 +56,8 @@ export const articles = pgTable(
     ],
 );
 
-export const table = {
+export const ArticleTable = {
     articles
 } as const;
 
-export type Table = typeof table;
+export type ArticleTable = typeof ArticleTable;

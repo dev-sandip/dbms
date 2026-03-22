@@ -19,8 +19,8 @@ export const categories = pgTable("categories", {
         .defaultNow(),
 });
 
-export const table = {
+export const CategoryTable = {
     categories
 } as const;
 
-export type Table = typeof table;
+export type CategoryTable = typeof CategoryTable;

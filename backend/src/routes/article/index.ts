@@ -1,10 +1,10 @@
 import { Elysia, t } from 'elysia';
 import db from '../../db';
 import { createInsertSchema } from 'drizzle-typebox';
-import { table } from '../../db/articles';
+import { ArticleTable } from '../../db/articles';
 import betterAuth from '../../macros/auth.macro';
 
-const ArticleSchema = createInsertSchema(table.articles, {
+const ArticleSchema = createInsertSchema(ArticleTable.articles, {
   title: t.String(),
   titleNp: t.String(),
   slug: t.String(),
@@ -31,7 +31,7 @@ export const article = new Elysia({ prefix: '/article' })
     '/',
     async ({ body, user }) => {
       const created = await db
-        .insert(table.articles)
+        .insert(ArticleTable.articles)
         .values({
           ...body,
           authorId: user.id,
@@ -53,7 +53,7 @@ export const article = new Elysia({ prefix: '/article' })
   ).get(
     '/',
     async () => {
-        const data = await db.select().from(table.articles);
+        const data = await db.select().from(ArticleTable.articles);
         return { data };  
     },
     {

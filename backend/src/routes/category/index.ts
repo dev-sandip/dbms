@@ -1,11 +1,11 @@
 import { Elysia, t } from 'elysia';
 import db from '../../db';
-import { categories, table } from '../../db/categories';
+import { CategoryTable } from '../../db/categories';
 import { createInsertSchema } from 'drizzle-typebox';
 import { eq } from 'drizzle-orm';
 import betterAuth from '../../macros/auth.macro';
 
-const CategorySchema = createInsertSchema(table.categories, {
+const CategorySchema = createInsertSchema(CategoryTable.categories, {
   name: t.String(),
   nameNp: t.String(),
   slug: t.String(),
@@ -18,7 +18,7 @@ export const category = new Elysia({ prefix: '/category' })
   .get(
     '/',
     async () => {
-      const data = await db.select().from(categories);
+      const data = await db.select().from(CategoryTable.categories);
       return { data };
     },
     {
@@ -33,7 +33,7 @@ export const category = new Elysia({ prefix: '/category' })
     async ({ body }) => {
      try{
        const result = await db
-        .insert(categories)
+        .insert(CategoryTable.categories)
         .values(body)
         .returning();  
         return { data: result };
@@ -57,9 +57,9 @@ export const category = new Elysia({ prefix: '/category' })
     async ({ body, params }) => {
         const id = params.id;
       const result = await db
-        .update(categories)
+        .update(CategoryTable.categories)
         .set(body)
-        .where(eq(categories.id, id))
+        .where(eq(CategoryTable.categories.id, id))
         .returning();
       return { data: result };
     },
@@ -73,8 +73,8 @@ export const category = new Elysia({ prefix: '/category' })
     }).delete('/:id', async ({ params }) => {
     const id = params.id;
     const result = await db
-      .delete(categories)
-      .where(eq(categories.id, params.id))
+      .delete(CategoryTable.categories)
+      .where(eq(CategoryTable.categories.id, params.id))
       .returning();
     return { data: result };
   }, {
