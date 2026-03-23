@@ -3,7 +3,6 @@ import { articles } from "./articles";
 
 export const tags = pgTable("tags", {
     id: uuid("id").primaryKey().defaultRandom(), 
-
     name: text("name").notNull().unique(),
     slug: text("slug").notNull().unique(),
 });
@@ -23,3 +22,9 @@ export const articleTags = pgTable(
         primaryKey({ columns: [t.articleId, t.tagId] }),
     ],
 );
+
+export const TagsTable = {
+    tags
+} as const;
+
+export type TagsTable = typeof TagsTable;

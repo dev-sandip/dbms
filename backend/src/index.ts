@@ -1,9 +1,10 @@
 import { Elysia } from "elysia";
 import { cors } from '@elysiajs/cors'
 import betterAuth from "./macros/auth.macro";
-import {  openapi } from '@elysiajs/openapi';
+import { openapi } from '@elysiajs/openapi';
 import { category } from "./routes/category";
 import { article } from "./routes/article";
+import { ad } from "./routes/ad";
 const app = new Elysia()
   .get(
     "/",
@@ -14,17 +15,20 @@ const app = new Elysia()
           status: "ok",
           message: "Welcome to the API",
           cron: "active"
-        }}else{
-      return {
+        }
+      } else {
+        return {
 
-        authDocs: "For auth docs visit /api/auth/reference",
-        docs: "For api docs visit /openapi"
-      }}
+          authDocs: "For auth docs visit /api/auth/reference",
+          docs: "For api docs visit /openapi"
+        }
+      }
     },
   )
   .use(betterAuth)
   .use(category)
   .use(article)
+  .use(ad)
   .use(openapi())
   .use(
     cors({
@@ -33,9 +37,9 @@ const app = new Elysia()
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization']
     })
-  ).listen(process.env.PORT ?? 3000) 
- 
+  ).listen(process.env.PORT ?? 3000)
+
 
 console.log(
-	`🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
+  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`,
 );

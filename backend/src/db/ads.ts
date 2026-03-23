@@ -27,3 +27,9 @@ export const ads = pgTable(
         index("idx_ads_dates").on(t.startDate, t.endDate),
     ],
 );
+
+export const AdsTable = {
+    ads
+} as const;
+
+export type AdsTable = typeof AdsTable;

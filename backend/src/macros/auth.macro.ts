@@ -9,7 +9,7 @@ const betterAuth = new Elysia({ name: "better-auth" })
           headers,
         });
         if (!session) return status(401);
-        // if(session.user.roles!="admin") return status(403);
+        if (session.user.role !== "admin") return status(403);
         return {
           user: session.user,
           session: session.session,
@@ -17,4 +17,4 @@ const betterAuth = new Elysia({ name: "better-auth" })
       },
     },
   });
-  export default betterAuth;
+export default betterAuth;

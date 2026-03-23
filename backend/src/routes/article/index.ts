@@ -3,6 +3,7 @@ import db from '../../db';
 import { createInsertSchema } from 'drizzle-typebox';
 import { ArticleTable } from '../../db/articles';
 import betterAuth from '../../macros/auth.macro';
+import { eq } from 'drizzle-orm';
 
 const ArticleSchema = createInsertSchema(ArticleTable.articles, {
   title: t.String(),
@@ -44,7 +45,7 @@ export const article = new Elysia({ prefix: '/article' })
     },
     {
       auth: true,
-      body: ArticleSchema,
+      body: t.Omit(ArticleSchema,["id","createdAt","updatedAt","updatedAt"]),
       detail: {
         tags: ['Article'],
         summary: 'Create a new article',
@@ -63,7 +64,55 @@ export const article = new Elysia({ prefix: '/article' })
         }
     }
   )
-  
-  
-  
-  ;
+  .get(
+    '/breaking',
+    async () => {
+      const data = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.isBreaking, true));
+      return { data };
+    },
+    {
+      detail: {
+        tags: ['Article'],
+        summary: 'Get breaking articles'
+      }
+    }
+  )
+  .get(
+    '/featured',
+    async () => {
+      const data = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.isFeatured, true));
+      return { data };
+    },
+    {
+      detail: {
+        tags: ['Article'],
+        summary: 'Get featured articles'
+      }
+    }
+  )
+  .get(
+    '/:id',
+    async ({ params }) => {
+      const article = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.id, params.id));
+      return article[0];
+    },
+    {
+      detail: {
+        tags: ['Article'],
+        summary: 'Get article by id'
+      }
+    }
+  ).delete(
+    '/:id',
+    async ({ params }) => {
+      await db.delete(ArticleTable.articles).where(eq(ArticleTable.articles.id, params.id));
+      return { message: 'Article deleted successfully' };
+    },
+    {
+      auth: true,
+      detail: {
+        tags: ['Article'],
+        summary: 'Delete article by id'
+      }
+    }
+  );
