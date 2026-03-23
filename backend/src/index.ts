@@ -4,7 +4,7 @@ import betterAuth from "./macros/auth.macro";
 import { openapi } from '@elysiajs/openapi';
 import { category } from "./routes/category";
 import { article } from "./routes/article";
-import { ad } from "./routes/ad";
+// import { ad } from "./routes/ad";
 const app = new Elysia()
   .get(
     "/",
@@ -28,11 +28,11 @@ const app = new Elysia()
   .use(betterAuth)
   .use(category)
   .use(article)
-  .use(ad)
+  // .use(ad)
   .use(openapi())
   .use(
     cors({
-      origin: 'http://localhost:3000',
+      origin: 'http://localhost:5173',
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
       credentials: true,
       allowedHeaders: ['Content-Type', 'Authorization']
