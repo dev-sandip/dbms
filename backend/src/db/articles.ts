@@ -29,8 +29,8 @@ export const articles = pgTable(
             .notNull()
             .references(() => user.id),
 
-        // still integer relation (unchanged)
-        categoryId: integer("category_id")
+       
+        categoryId: text("category_id")
             .references(() => categories.id),
 
         status: articleStatusEnum("status").default("draft").notNull(),

@@ -1,0 +1,1 @@
+export const FRONTEND_DEPLOYED_URL="https://dbms.thesandip.dev"

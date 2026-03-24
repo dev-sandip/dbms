@@ -134,3 +134,17 @@
     @apply font-sans;
   }
 }
+
+@keyframes tickerScroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.ticker-track {
+  animation: tickerScroll 30s linear infinite;
+  will-change: transform;
+}

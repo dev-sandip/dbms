@@ -31,6 +31,7 @@ export const category = new Elysia({ prefix: '/category' })
   .post(
     '/',
     async ({ body }) => {
+      console.log("Received request to create category with body", body);
      try{
        const result = await db
         .insert(CategoryTable.categories)

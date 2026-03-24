@@ -4,6 +4,7 @@ import { createInsertSchema } from 'drizzle-typebox';
 import { ArticleTable } from '../../db/articles';
 import betterAuth from '../../macros/auth.macro';
 import { eq } from 'drizzle-orm';
+import { user as UserTable } from '../../db/user';
 
 const ArticleSchema = createInsertSchema(ArticleTable.articles, {
   title: t.String(),
@@ -14,7 +15,7 @@ const ArticleSchema = createInsertSchema(ArticleTable.articles, {
   coverImage: t.Optional(t.String()),
   coverImageAlt: t.Optional(t.String()),
   authorId: t.String(),
-  categoryId: t.Optional(t.Integer()),
+  categoryId: t.Optional(t.String()),
   status: t.Enum({
     draft: 'draft',
     published: 'published',
@@ -41,7 +42,20 @@ export const article = new Elysia({ prefix: '/article' })
         .returning()
         .then((r) => r[0]);
 
-      return created;
+      const author = await db
+        .select({
+          name: UserTable.name,
+          image: UserTable.image,
+        })
+        .from(UserTable)
+        .where(eq(UserTable.id, user.id))
+        .then((r) => r[0]);
+
+      return {
+        ...created,
+        authorName: author?.name ?? null,
+        authorImage: author?.image ?? null,
+      };
     },
     {
       auth: true,
@@ -54,8 +68,32 @@ export const article = new Elysia({ prefix: '/article' })
   ).get(
     '/',
     async () => {
-        const data = await db.select().from(ArticleTable.articles);
-        return { data };  
+        const data = await db
+          .select({
+            id: ArticleTable.articles.id,
+            title: ArticleTable.articles.title,
+            titleNp: ArticleTable.articles.titleNp,
+            slug: ArticleTable.articles.slug,
+            excerpt: ArticleTable.articles.excerpt,
+            body: ArticleTable.articles.body,
+            coverImage: ArticleTable.articles.coverImage,
+            coverImageAlt: ArticleTable.articles.coverImageAlt,
+            authorId: ArticleTable.articles.authorId,
+            categoryId: ArticleTable.articles.categoryId,
+            status: ArticleTable.articles.status,
+            isFeatured: ArticleTable.articles.isFeatured,
+            isBreaking: ArticleTable.articles.isBreaking,
+            views: ArticleTable.articles.views,
+            publishedAt: ArticleTable.articles.publishedAt,
+            createdAt: ArticleTable.articles.createdAt,
+            updatedAt: ArticleTable.articles.updatedAt,
+            authorName: UserTable.name,
+            authorImage: UserTable.image,
+          })
+          .from(ArticleTable.articles)
+          .leftJoin(UserTable, eq(ArticleTable.articles.authorId, UserTable.id));
+
+        return { data };
     },
     {
         detail: {
@@ -67,7 +105,32 @@ export const article = new Elysia({ prefix: '/article' })
   .get(
     '/breaking',
     async () => {
-      const data = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.isBreaking, true));
+      const data = await db
+        .select({
+          id: ArticleTable.articles.id,
+          title: ArticleTable.articles.title,
+          titleNp: ArticleTable.articles.titleNp,
+          slug: ArticleTable.articles.slug,
+          excerpt: ArticleTable.articles.excerpt,
+          body: ArticleTable.articles.body,
+          coverImage: ArticleTable.articles.coverImage,
+          coverImageAlt: ArticleTable.articles.coverImageAlt,
+          authorId: ArticleTable.articles.authorId,
+          categoryId: ArticleTable.articles.categoryId,
+          status: ArticleTable.articles.status,
+          isFeatured: ArticleTable.articles.isFeatured,
+          isBreaking: ArticleTable.articles.isBreaking,
+          views: ArticleTable.articles.views,
+          publishedAt: ArticleTable.articles.publishedAt,
+          createdAt: ArticleTable.articles.createdAt,
+          updatedAt: ArticleTable.articles.updatedAt,
+          authorName: UserTable.name,
+          authorImage: UserTable.image,
+        })
+        .from(ArticleTable.articles)
+        .leftJoin(UserTable, eq(ArticleTable.articles.authorId, UserTable.id))
+        .where(eq(ArticleTable.articles.isBreaking, true));
+
       return { data };
     },
     {
@@ -80,7 +143,32 @@ export const article = new Elysia({ prefix: '/article' })
   .get(
     '/featured',
     async () => {
-      const data = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.isFeatured, true));
+      const data = await db
+        .select({
+          id: ArticleTable.articles.id,
+          title: ArticleTable.articles.title,
+          titleNp: ArticleTable.articles.titleNp,
+          slug: ArticleTable.articles.slug,
+          excerpt: ArticleTable.articles.excerpt,
+          body: ArticleTable.articles.body,
+          coverImage: ArticleTable.articles.coverImage,
+          coverImageAlt: ArticleTable.articles.coverImageAlt,
+          authorId: ArticleTable.articles.authorId,
+          categoryId: ArticleTable.articles.categoryId,
+          status: ArticleTable.articles.status,
+          isFeatured: ArticleTable.articles.isFeatured,
+          isBreaking: ArticleTable.articles.isBreaking,
+          views: ArticleTable.articles.views,
+          publishedAt: ArticleTable.articles.publishedAt,
+          createdAt: ArticleTable.articles.createdAt,
+          updatedAt: ArticleTable.articles.updatedAt,
+          authorName: UserTable.name,
+          authorImage: UserTable.image,
+        })
+        .from(ArticleTable.articles)
+        .leftJoin(UserTable, eq(ArticleTable.articles.authorId, UserTable.id))
+        .where(eq(ArticleTable.articles.isFeatured, true));
+
       return { data };
     },
     {
@@ -93,7 +181,32 @@ export const article = new Elysia({ prefix: '/article' })
   .get(
     '/:id',
     async ({ params }) => {
-      const article = await db.select().from(ArticleTable.articles).where(eq(ArticleTable.articles.id, params.id));
+      const article = await db
+        .select({
+          id: ArticleTable.articles.id,
+          title: ArticleTable.articles.title,
+          titleNp: ArticleTable.articles.titleNp,
+          slug: ArticleTable.articles.slug,
+          excerpt: ArticleTable.articles.excerpt,
+          body: ArticleTable.articles.body,
+          coverImage: ArticleTable.articles.coverImage,
+          coverImageAlt: ArticleTable.articles.coverImageAlt,
+          authorId: ArticleTable.articles.authorId,
+          categoryId: ArticleTable.articles.categoryId,
+          status: ArticleTable.articles.status,
+          isFeatured: ArticleTable.articles.isFeatured,
+          isBreaking: ArticleTable.articles.isBreaking,
+          views: ArticleTable.articles.views,
+          publishedAt: ArticleTable.articles.publishedAt,
+          createdAt: ArticleTable.articles.createdAt,
+          updatedAt: ArticleTable.articles.updatedAt,
+          authorName: UserTable.name,
+          authorImage: UserTable.image,
+        })
+        .from(ArticleTable.articles)
+        .leftJoin(UserTable, eq(ArticleTable.articles.authorId, UserTable.id))
+        .where(eq(ArticleTable.articles.id, params.id));
+
       return article[0];
     },
     {

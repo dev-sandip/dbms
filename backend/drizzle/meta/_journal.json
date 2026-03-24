@@ -8,6 +8,13 @@
       "when": 1774199741756,
       "tag": "0000_friendly_slyde",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1774278612028,
+      "tag": "0001_dusty_warbird",
+      "breakpoints": true
     }
   ]
 }
