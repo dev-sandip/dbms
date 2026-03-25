@@ -1,4 +1,4 @@
-import { QUERY_KEYS } from "@/constants/query-keys";
+
 import {
 
     queryOptions,
@@ -10,6 +10,7 @@ import {
 import { BetterAuthError } from "better-auth";
 import { authClient as auth } from "./lib";
 import type { EmailAndPasswordLoginProps } from "./types";
+import { QUERY_KEYS } from "#/constants/query-keys";
 
 export const useEmailAndPasswordLogin = () => {
   return useMutation({
